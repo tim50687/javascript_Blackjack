@@ -1,6 +1,7 @@
 let hasBlackjack = false; // See if user got Blackjack
-let isAlive = true; // See if user is still in the game
+let isAlive = false; // See if user is still in the game
 let message = "";
+let globalCards = new Array();
 
 // Store the message element paragraph in a variable called messageEl
 let messageEl = document.querySelector("#message-el");
@@ -11,33 +12,22 @@ let cardsEl = document.querySelector("#cards-el");
 
 // This function will start the game
 function startGame() {
-  let firstCard = getRandomInt(1, 11);
-  let secondCard = getRandomInt(1, 11);
-
-  // Display the firstCard and secondCard
-  cardsEl.textContent = "Cards: " + firstCard + " and " + secondCard;
-
-  // Display the sum of the firstCard and secondCard
-  let sum = firstCard + secondCard;
-  sumEl.textContent = "Sum: " + sum;
-
-  let currentSum = firstCard + secondCard;
-
-  if (currentSum < 21) {
-    message = "Do you want to draw a new card?";
-  } else if (currentSum === 21) {
-    hasBlackjack = true;
-    message = "Let's go! You got Balckjack!";
-  } else {
-    isAlive = false;
-    message = "You are out of the game";
+  if (isAlive) {
+    return;
+  }
+  isAlive = true;
+  // Get the first two cards
+  for (let i = 0; i < 2; i++) {
+    globalCards.push(getRandomInt(1, 11));
   }
 
-  messageEl.textContent = message;
+  // Display the firstCard and secondCard
+  renderGame(globalCards);
 }
 
 // This function will render the current game result by given current cards
 function renderGame(cards) {
+  console.log(cards);
   let currentCards = "Cards: ";
   let currentSum = 0;
   // Display the cards that user got so far
@@ -47,11 +37,14 @@ function renderGame(cards) {
     if (i == 0) {
       currentCards += `${cards[i]}`;
     } else {
-      currentCards += `and ${cards[i]}`;
+      currentCards += ` , ${cards[i]}`;
     }
   }
   // Show cards to user
   cardsEl.textContent = currentCards;
+
+  // Show sum to user
+  sumEl.textContent = "Sum: " + currentSum;
 
   // Show the message to user
   if (currentSum < 21) {
@@ -62,16 +55,22 @@ function renderGame(cards) {
   } else {
     isAlive = false;
     message = "You are out of the game";
+    // Clear the state
+    globalCards = new Array();
   }
 
   messageEl.textContent = message;
+  console.log(cardsEl.textContent);
 }
 
 // This function will give user a new card
-function newCard(sum) {
+function newCard() {
+  if (isAlive === false || hasBlackjack === true) {
+    return;
+  }
   let newCard = getRandomInt(1, 11);
-  sum += newCard;
-  renderGame();
+  globalCards.push(newCard);
+  renderGame(globalCards);
 }
 
 // This function will get random number between min and max
