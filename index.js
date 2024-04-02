@@ -9,26 +9,17 @@ let sumEl = document.querySelector("#sum-el");
 // Store the cards element in a variable called cardsEl
 let cardsEl = document.querySelector("#cards-el");
 
-// This function will do the game logic
-function play() {
+// This function will start the game
+function startGame() {
   let firstCard = getRandomInt(1, 11);
   let secondCard = getRandomInt(1, 11);
 
-  // display the firstCard and secondCard
+  // Display the firstCard and secondCard
   cardsEl.textContent = "Cards: " + firstCard + " and " + secondCard;
 
-  // display the sum of the firstCard and secondCard
+  // Display the sum of the firstCard and secondCard
   let sum = firstCard + secondCard;
   sumEl.textContent = "Sum: " + sum;
-
-  // Check if user got A and (10, J, Q, K)
-  // if (
-  //   (firstCard === 1 && secondCard === 10) ||
-  //   (firstCard === 10 && secondCard === 1)
-  // ) {
-  //   hasBlackjack = true;
-  //   message = "Let's go! You got Balckjack!";
-  // }
 
   let currentSum = firstCard + secondCard;
 
@@ -45,9 +36,42 @@ function play() {
   messageEl.textContent = message;
 }
 
+// This function will render the current game result by given current cards
+function renderGame(cards) {
+  let currentCards = "Cards: ";
+  let currentSum = 0;
+  // Display the cards that user got so far
+  for (let i = 0; i < cards.length; i++) {
+    // Add up the sum
+    currentSum += cards[i];
+    if (i == 0) {
+      currentCards += `${cards[i]}`;
+    } else {
+      currentCards += `and ${cards[i]}`;
+    }
+  }
+  // Show cards to user
+  cardsEl.textContent = currentCards;
+
+  // Show the message to user
+  if (currentSum < 21) {
+    message = "Do you want to draw a new card?";
+  } else if (currentSum === 21) {
+    hasBlackjack = true;
+    message = "Let's go! You got Balckjack!";
+  } else {
+    isAlive = false;
+    message = "You are out of the game";
+  }
+
+  messageEl.textContent = message;
+}
+
 // This function will give user a new card
-function newCard() {
-  alert("Drawing a new card from the deck");
+function newCard(sum) {
+  let newCard = getRandomInt(1, 11);
+  sum += newCard;
+  renderGame();
 }
 
 // This function will get random number between min and max
