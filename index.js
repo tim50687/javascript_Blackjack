@@ -3,12 +3,21 @@ let isAlive = false; // See if user is still in the game
 let message = "";
 let globalCards = new Array();
 
+let player = {
+  name: "Tim",
+  chips: 100,
+};
+
 // Store the message element paragraph in a variable called messageEl
 let messageEl = document.querySelector("#message-el");
 // Store the sum element in a variable called sumEl
 let sumEl = document.querySelector("#sum-el");
 // Store the cards element in a variable called cardsEl
 let cardsEl = document.querySelector("#cards-el");
+// Store the player element in a variable called playerEl
+let playerEl = document.querySelector("#player-el");
+
+playerEl.textContent = player.name + ": $" + player.chips;
 
 // This function will start the game
 function startGame() {
